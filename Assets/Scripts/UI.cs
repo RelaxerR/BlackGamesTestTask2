@@ -7,8 +7,6 @@ public class UI : MonoBehaviour
     [SerializeField] private GameObject StartMenu;
     [SerializeField] private GameObject RestartMenu;
 
-    private int GettedCubesCount;
-
     public static UI Instance {get; private set; }
     public event Action GameStartedEvent;
 
@@ -17,9 +15,6 @@ public class UI : MonoBehaviour
     }
     private void Start(){
         RestartMenu.SetActive(false);
-    }
-    private void OnDestroy(){
-
     }
     
     public void StartButtonClick(){

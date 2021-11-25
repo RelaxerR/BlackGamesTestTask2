@@ -7,7 +7,7 @@ public class Wall : MonoBehaviour
 
     private int _count;
 
-    void OnCollisionStay(Collision col){
+    private void OnCollisionEnter(Collision col){
         if (col.gameObject.tag == gameObject.tag){
             ChangeCount();
             col.gameObject.GetComponent<Cube>().Get();

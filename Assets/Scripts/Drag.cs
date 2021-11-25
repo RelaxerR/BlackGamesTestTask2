@@ -2,32 +2,55 @@ using UnityEngine;
 
 public class Drag : MonoBehaviour
 {
-    public Transform target;
-    private Vector3 offset;
-    private float distance;
+    public Transform Target;
+    public static Drag Instance;
 
-    void Update() {
+    private Vector3 _offset;
+    private float _distance;
+    private Camera _camera;
+
+    private void Awake(){
+        _camera = Camera.main;
+    }
+    private void Start(){
+        Instance = this;
+    }
+    private void Update() {
         TakeCube();
     }
 
     private void TakeCube(){
-        if (Input.GetMouseButtonDown(0)) { // Захват мышью
+        // get cube with mouse
+        if (Input.GetMouseButtonDown(0)) {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit)) {
-                target = hit.transform;
-                target.transform.localScale *= 1.5f;
-                offset = target.position - hit.point;
-                distance = hit.distance;
+                Target = hit.transform;
+
+                Target.transform.localScale *= 1.1f;
+                _offset = Target.position - hit.point;
+                _distance = hit.distance;
             }
         }
-        if (Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0) && target != null) { // Передвижение
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            target.position = ray.origin + ray.direction * distance + offset;
+
+        // mouse movement
+        if (Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0) && Target != null) {
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+            var moveToPos = ray.origin + ray.direction * _distance;
+            var moveVector = moveToPos - Target.position;
+
+            if (moveToPos.y < 0.5) return; // idk. no way
+            Target.transform.Translate(moveVector);
         }
-        if (Input.GetMouseButtonUp(0)){
-            if (target != null) target.transform.localScale /= 1.5f;
-            target = null;
-        } // Отпускание   
+
+        // end mouse movement
+        if (Input.GetMouseButtonUp(0))
+            LoseControl();
+    }
+
+    public void LoseControl(){
+        if (Target != null) Target.transform.localScale /= 1.1f;
+        Target = null;
     }
 }

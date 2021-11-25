@@ -7,14 +7,14 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject RedCubePrefab;
     [SerializeField] private GameObject BlueCubePrefab;
 
-    public static int _CubesCount { get; private set; }
+    public static int _cubesCount { get; private set; }
 
-    void Start(){
-        _CubesCount = Random.Range(5, 10);
+    private void Start(){
+        _cubesCount = Random.Range(5, 10);
 
         UI.Instance.GameStartedEvent += SpawnCubes;
     }
-    void OnDestroy(){
+    private void OnDestroy(){
         UI.Instance.GameStartedEvent -= SpawnCubes;
     }
 
@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour
     }
 
     private IEnumerator Spawner(){ // Sequential appearance of cubes
-        for (int i = 0; i < _CubesCount; i++){
+        for (int i = 0; i < _cubesCount; i++){
             GameObject prefab;
 
             if (Random.value < 0.5f)

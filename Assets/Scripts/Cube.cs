@@ -3,12 +3,12 @@ using UnityEngine;
 public class Cube : MonoBehaviour
 {
     [SerializeField] private float Force;
-    private Rigidbody rb;
+    private Rigidbody _rigitBody;
 
     private void Start(){
-        rb = GetComponent<Rigidbody>();
+        _rigitBody = GetComponent<Rigidbody>();
     }
-    void Update()
+    private void Update()
     {
         if (transform.position.y < -10){
             transform.position = new Vector3(0, 3, 0);
@@ -16,10 +16,13 @@ public class Cube : MonoBehaviour
     }
 
     public void BackForce(){
-        if (transform.position.x < 0)
-            rb.AddForce(Vector3.right * Force);
-        else
-            rb.AddForce(Vector3.left * Force);
+        float xForce = 0;
+        if (_rigitBody.velocity.x > 0) xForce = -Force;
+        else xForce = Force;
+        
+        _rigitBody.AddForce(new Vector3(xForce, 0, 0));
+
+        Drag.Instance.LoseControl();
     }
 
     public void Get(){
